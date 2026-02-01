@@ -22,6 +22,18 @@
       "env": {
         "STITCH_PROJECT_ID": "<YOUR_GCP_PROJECT_ID>"
       }
+    },
+    "gsap-master": {
+      "command": "npx",
+      "args": ["bruzethegreat-gsap-master-mcp-server@latest"]
+    },
+    "spline-design": {
+      "command": "npx",
+      "args": ["-y", "spline-mcp-server"]
+    },
+    "mcp-three": {
+      "command": "npx",
+      "args": ["-y", "@basementstudio/mcp-three"]
     }
   }
 }
