@@ -34,6 +34,10 @@
     "mcp-three": {
       "command": "npx",
       "args": ["-y", "@basementstudio/mcp-three"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     }
   }
 }

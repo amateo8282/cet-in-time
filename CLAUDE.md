@@ -122,11 +122,62 @@ project/
 
 - Next.js App Router 사용 시 `src/` 대신 `app/` 폴더 가능
 
+## 병렬 서브 에이전트 활용
+
+### 공통 규칙
+- 각 에이전트는 반드시 CLAUDE.md를 읽고 프로젝트 규칙을 따를 것
+- feature 브랜치에서 작업하고, 변경마다 테스트 실행
+- 실패 시 최소 3가지 다른 접근을 시도한 후 블로커로 보고
+- 모든 에이전트 완료 후 단일 PR 생성 (각 에이전트 작업 요약 포함)
+
+### 패턴 1: 디자인 시스템 추출
+3개 병렬 에이전트로 각 참조 사이트에서 색상 팔레트, 타이포그래피, 간격 추출:
+- 각 에이전트는 `/design-systems/`에 개별 JSON 출력
+- 전체 완료 후 통합 `design-tokens.json` 합성
+
+### 패턴 2: 풀스택 기능 구현
+3개 병렬 에이전트로 백엔드/프론트엔드/통합 동시 구현:
+- **백엔드 에이전트**: FastAPI 엔드포인트 구현 (요청 검증, 에러 처리, pytest 테스트). 테스트 통과까지 반복
+- **프론트엔드 에이전트**: React 컴포넌트 구현 (TypeScript 타입, Tailwind 스타일링, 테스트). 테스트 통과까지 반복
+- **통합 에이전트**: 위 두 에이전트 완료 대기 후 통합 테스트 작성. API 호출 -> 프론트엔드 렌더링 검증
+
+## 태스크 추적 (TaskCreate/TaskUpdate)
+
+### 플랜 문서 작성 시 태스크 분해 규칙
+- 플랜 문서(`docs/plans/TASK.md`) 작성과 동시에 **TaskCreate로 개별 태스크를 등록**할 것
+- 기능을 구현 가능한 최소 단위로 분해 (1태스크 = 1커밋 수준)
+- 각 태스크에는 명확한 완료 조건(acceptance criteria)을 description에 포함
+- 태스크 간 의존성이 있으면 `addBlockedBy`로 순서 지정
+
+### 태스크 상태 관리
+- 구현 시작 시: `TaskUpdate`로 `in_progress` 전환
+- 테스트 통과 + 커밋 완료 시: `TaskUpdate`로 `completed` 전환
+- 구현 중 추가 작업 발견 시: 즉시 `TaskCreate`로 새 태스크 추가
+- 블로커 발생 시: 태스크는 `in_progress` 유지, 블로커 내용을 description에 기록
+
+### 태스크 분해 예시
+```
+기능: 사용자 로그인
+
+태스크 1: User 엔티티 및 값 객체 정의 (Domain)
+태스크 2: AuthRepository 인터페이스 정의 (Application)
+태스크 3: LoginUseCase 구현 (Application) -- blocked by 1, 2
+태스크 4: AuthRepository 구현 (Infrastructure) -- blocked by 2
+태스크 5: LoginForm 컴포넌트 구현 (Presentation) -- blocked by 3, 4
+태스크 6: 통합 테스트 작성 -- blocked by 5
+```
+
+### 진행 상황 확인
+- 작업 시작 전 `TaskList`로 현재 진행 상황 파악
+- 완료된 태스크 비율로 전체 진행도 추적
+- 모든 태스크 완료 시 최종 통합 테스트 후 푸시
+
 ## 작업 흐름
 
 1. 기능 요구사항 확인 및 도메인 모델 설계
 2. `docs/plans/`에 계획 문서 작성 (Plan.md, PRD.md, TRD.md, TASK.md)
-3. TDD 사이클 실행 (Red -> Green -> Refactor -> 커밋)
-4. 통합/E2E 테스트
-5. 푸시 (README.md 점검 포함)
-6. 문서 업데이트 (프로젝트 푸시 시 본 파일도 프로젝트 내용 반영하여 업데이트)
+3. **TASK.md 기반으로 TaskCreate로 태스크 등록** (의존성 포함)
+4. TDD 사이클 실행 (Red -> Green -> Refactor -> 커밋) -- 각 태스크별 상태 업데이트
+5. 통합/E2E 테스트
+6. 푸시 (README.md 점검 포함)
+7. 문서 업데이트 (프로젝트 푸시 시 본 파일도 프로젝트 내용 반영하여 업데이트)
