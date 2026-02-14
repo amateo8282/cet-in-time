@@ -1,0 +1,27 @@
+{
+  "name": "cet-in-time",
+  "version": "1.0.0",
+  "description": "크롬 익스텐션 - 상품 가격을 근로 시간으로 변환",
+  "private": true,
+  "scripts": {
+    "build": "vite build && vite build -c vite.content.config.ts && vite build -c vite.background.config.ts && cp manifest.json dist/ && mv dist/index.html dist/popup.html && cp src/presentation/content/overlay.css dist/overlay.css && cp -r public/icons dist/icons 2>/dev/null || true",
+    "build:popup": "vite build",
+    "build:content": "vite build -c vite.content.config.ts",
+    "build:background": "vite build -c vite.background.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "@types/chrome": "^0.1.36",
+    "@types/node": "^25.2.3",
+    "jsdom": "^28.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
+  }
+}

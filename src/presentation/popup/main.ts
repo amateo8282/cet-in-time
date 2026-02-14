@@ -1,0 +1,2 @@
+// Popup 진입점 - Phase 4에서 구현
+console.log("[CET] Popup loaded");
