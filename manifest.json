@@ -5,12 +5,7 @@
   "description": "쿠팡 상품 가격을 근로 시간으로 변환하여 표시합니다",
   "permissions": ["storage", "activeTab"],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    }
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js"
@@ -22,10 +17,5 @@
       "css": ["overlay.css"],
       "run_at": "document_idle"
     }
-  ],
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
+  ]
 }
