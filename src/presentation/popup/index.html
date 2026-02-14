@@ -8,8 +8,36 @@
 </head>
 <body>
   <div id="app">
-    <h1>내 시간의 가격</h1>
-    <p>Phase 4에서 구현 예정</p>
+    <header class="header">
+      <h1>내 시간의 가격</h1>
+      <p class="subtitle">상품 가격을 근로 시간으로 변환</p>
+    </header>
+
+    <div class="form-group">
+      <label for="salary-input">월급 (원)</label>
+      <input
+        type="text"
+        id="salary-input"
+        placeholder="예: 3,000,000"
+        inputmode="numeric"
+      />
+    </div>
+
+    <div class="info-row">
+      <span class="label">시급</span>
+      <span id="hourly-wage" class="value">-</span>
+    </div>
+
+    <div class="toggle-row">
+      <span class="label">변환 활성화</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-enabled" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <button id="save-btn" class="save-btn">저장</button>
+    <p id="status-msg" class="status-msg"></p>
   </div>
   <script type="module" src="./main.ts"></script>
 </body>
